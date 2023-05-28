@@ -1,4 +1,4 @@
-# FarmBug Workshop Part 2: LoRaWAN Implementation
+# FarmBug Workshop Part 3: LoRaWAN Implementation
 
 This final part will cover how to implement the LoRaWAN functionality to our FarmBug.
 
@@ -73,5 +73,3 @@ Implementing LoRaWAN with the OTX-18 is really simple, we only need to have thre
 - `LoRaWAN_Join(...)` to join to the LoRaWAN network
 - `LoRaWAN_Send(...)` to send data to the LoRaWAN network
 
-
-### 1.1 Add the ADC UserModule
