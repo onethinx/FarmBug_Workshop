@@ -38,7 +38,7 @@ We want to change the automatic blinking LED and have the firmware determine the
 ![debug session](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/debug_session.png?raw=true)<br>
   You can play around with the debug buttons to see it's functionality (e.g. step into the CyDelay function)
   
-## 2 Add the Capacitive moisture sensor
+## 2 Implementing the Capacitive moisture sensor
 The moisture sensor consists of a capacitive element which can be perfectly implemented by the CapSense usermodule of the PSoC6. First we'll implement the CapSense chip configuration and second we will add the code for reading the CapSense value.
 
 ### 2.1 Adding the CapSense UserModule
