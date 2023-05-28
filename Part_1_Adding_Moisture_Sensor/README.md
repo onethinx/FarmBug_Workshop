@@ -5,6 +5,7 @@
 ## 1 Change LED functionality
 We want to change the automatic blinking LED and have the firmware determine the state of the LED. This way we can give useful information to the user about the status of the Farmbug.
 
+### 1.1 Configure the LED IO pin for use in firmware 
 1. Open the Onethinx_Creator project in PSoC Creator. (double click `Onethinx_Creator.cyprj` inside the project folder `..\OTX-FarmBug\Onethinx_Creator.cydsn` or select the `Onethinx_Creator.cyprj` from PSoC Creator's recent project list)
 1. Open the TopDesign.cysch schematic from the Workspace Explorer (left bar in PSoC Creator)
 1. Remove the circuitry except the LED IO symbol (select and press `delete`)
@@ -13,12 +14,15 @@ We want to change the automatic blinking LED and have the firmware determine the
 ![LED HW connection](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/LED_HWconnect.png?raw=true)<br>
 1. Also note that there's no circuitry left on the schematic except the LED_B IO pin
 1. Build the project via the Build menu or by clicking the Build Symbol (or just press Shift+F6)
-1. After building, open the Visual Studio Code project (if not already open)
-1. Include the PSoC Creator project by adding the following line before the main function (line 43)<br>
+1. Wait for the build to succeed
+
+### 1.2 Write code to flash the LED 3 times at startup
+1. Open the Visual Studio Code project (if not already open)
+2. Include the PSoC Creator project by adding the following line before the main function (line 43)<br>
 ```
 #include "project.h"
 ```
-1. Add the following code at the start of the main function to have the blue LED flash 3 times at startup:<br>
+3. Add the following code at the start of the main function to have the blue LED flash 3 times at startup:<br>
 ```
 	/* Flash the LED 3 times at start */
 	for (uint32_t cnt = 0; cnt < 3; cnt++)				// Make a loop which runs 3 times
@@ -29,7 +33,7 @@ We want to change the automatic blinking LED and have the firmware determine the
 		CyDelay(300);
 	}
 ```
-1. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code<br>
+4. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code<br>
   Real time debugging is accomplished with the debug buttons as shown:<br>
 ![debug session](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/debug_session.png?raw=true)<br>
   You can play around with the debug buttons to see it's functionality (e.g. step into the CyDelay function)
@@ -53,6 +57,10 @@ The moisture sensor consists of a capacitive element which can be perfectly impl
 Capsense requires one IO to connect to a modulation capacitor. The OTX-18 has an internal connection of P7[7] to P10[2]. To use Capsense with the Onethinx module, the modulation capacitor needs to be connected to P10[2] and the PSoC Creator project has to be configured for a modulation capacitor at P7[7].
 1. Look up which IO pin the Sensor element is connected to. The sensor element in the [FarmBug schematic](https://github.com/onethinx/Workshop_29May2023/blob/main/Assets/FarmBug_schematic.png?raw=true) is indicated with C+:<br>
 ![IO_config](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/IO_config.png?raw=true)<br>
-1. Open the Pins view inside PSoC Creator and set `\CapSense:Cmod\ (Cmod)` to P7[7]:<br>
+1. Open the Pins view inside PSoC Creator and set the modulation capacitor `\CapSense:Cmod\ (Cmod)` to P7[7]:<br>
 ![CapSense pin](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/CapSense_pin.png?raw=true)<br>
 1. Set the CapSense sensor element `\CapSense:Sns\ (Cmod)` to the correct IO pin as found in the schematic above.
+1. Build the project via the Build menu or by clicking the Build Symbol (or just press Shift+F6)
+3. Wait for the build to succeed
+
+### 2.2 Write code for the CapSense implementation
