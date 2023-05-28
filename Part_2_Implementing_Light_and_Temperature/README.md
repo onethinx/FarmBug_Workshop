@@ -29,9 +29,6 @@ To implement the reading of the sensors, we have to add the ADC UserModule to th
 1. Rename Pin_6 to: PWR_NTC2 and uncheck the `HW connection` option<br>
 1. After configuration, the setup should look like this:<br>
 ![Sensor IO Pins Configured](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/Sensor_IO_Pins_Configured.png?raw=true)<br>
-1. Build the project via the Build menu or by clicking the Build Symbol (or just press Shift+F6)
-1. Wait for the build to succeed
-1. Repeat the last build step.
 
 ### 1.3 Set the correct IO pins for powering the Sensors and interfacing the Analog Signals
 1. Look up the following IO pins in the [FarmBug schematic](https://github.com/onethinx/Workshop_29May2023/blob/main/Assets/FarmBug_schematic.png?raw=true) and note the corresponding IO pin:<br>
@@ -43,6 +40,9 @@ To implement the reading of the sensors, we have to add the ADC UserModule to th
   1.6 Air sensor signal: V_NTC2<br>
 1. Open the Pins view from the WorkSpace Explorer under Design Wide Resources
 1. Configure the Sensor IO pins (dropdown arrow) wiith the schematic Pin numbering as just found.
+1. Build the project via the Build menu or by clicking the Build Symbol (or just press Shift+F6)
+1. Wait for the build to succeed
+1. Repeat the last build step.
 
 ### 1.4 Write code for the ADC implementation
 1. Switch to the Visual Studio Code project
