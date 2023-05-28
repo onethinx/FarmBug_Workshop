@@ -69,9 +69,9 @@ coreConfiguration_t	coreConfig = {
  
 ### 1.2 Implementing the LoRaWAN function calls
 Implementing LoRaWAN with the OTX-18 is really simple, we only need to have three function calls:
-- LoRaWAN_Init(...) to initialize and configure the LoRaWAN stack
-- LoRaWAN_Join(...) to join to the LoRaWAN network
-- LoRaWAN_Send(...) to send data to the LoRaWAN network
+- `LoRaWAN_Init(...)` to initialize and configure the LoRaWAN stack
+- `LoRaWAN_Join(...)` to join to the LoRaWAN network
+- `LoRaWAN_Send(...)` to send data to the LoRaWAN network
 
 
 ### 1.1 Add the ADC UserModule
