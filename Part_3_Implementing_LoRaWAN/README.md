@@ -27,7 +27,7 @@ The following basic system settings will be used:
 - 
 The personal keys for joining the network will be handed out at the start of the workshop.
 
-1. Put the following code after `#include "OTX18-EnableCapSense.h"` to implement the configuration as described above:
+1. Put the following code after `#include "OTX18-EnableCapSense.h"` (line 42) to implement the configuration as described above:
 ```
 #include "LoRaWAN_keys.h"
 
