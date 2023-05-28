@@ -12,3 +12,24 @@ We want to change the automatic blinking LED and have the firmware determine the
 1. Uncheck `HW Connection` as shown below<br>
 ![LED HW connection](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/LED_HWconnect.png?raw=true)<br>
 1. Also note that there's no circuitry left on the schematic except the LED_B IO pin
+1. Build the project via the Build menu or by clicking the Build Symbol (or just press Shift+F6)
+1. After building, open the Visual Studio Code project (if not already open)
+1. Include the PSoC Creator project by adding the following line before the main function (line 43)<br>
+```
+#include "project.h"
+```
+1. Add the following code at the start of the main function to have the blue LED flash 3 times at startup:<br>
+```
+	/* Flash the LED 3 times at start */
+	for (uint32_t cnt = 0; cnt < 3; cnt++)				// Make a loop which runs 3 times
+	{
+		Cy_GPIO_Write(LED_B_PORT, LED_B_NUM, 1);		// Turn LED on
+		CyDelay(300);									// Wait 300 milliseconds
+		Cy_GPIO_Write(LED_B_PORT, LED_B_NUM, 0);		// Turn LED off
+		CyDelay(300);
+	}
+```
+3. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code<br>
+  Real time debugging is accomplished with the debug buttons as shown.<br>
+![debug session](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/debug_session.png?raw=true)<br>
+  You can play around with the debug buttons to see it's functionality (e.g. step into the CyDelay function)
