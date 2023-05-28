@@ -70,7 +70,7 @@ Capsense requires one IO to connect to a modulation capacitor. The OTX-18 has an
 ```
 #include "OTX18-EnableCapSense.h"
 ```
-3. Add the following code at the start of the main function to initialize / configure CapSense at startup:<br>
+3. Add the following code at the start of the main function to enable global interrupts (needed for CapSense and OTX-18 functions) and initialize / configure CapSense at startup:<br>
 ```
 	/* Enable Global Interrupts */
 	__enable_irq();
@@ -93,4 +93,6 @@ Capsense requires one IO to connect to a modulation capacitor. The OTX-18 has an
 		Cy_GPIO_Write(LED_B_PORT, LED_B_NUM,  CapSense_Value > 3800);
 ```
 5. If the instructions are followed correctly, the code should look like [this](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/code_2.2.png?raw=true)
-6. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code<br>
+6. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code
+7. Cross fingers and hopefully the Blue LED will turn on as soon as you touch the moisture sensor element 🎉
+8. Congratulations, you're now a qualified Onethinx Talented Engineer<br>🤓
