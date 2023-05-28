@@ -1,7 +1,5 @@
 # FarmBug Workshop Part 1: Adding Moisture Sensor
 
-**IMPORTANT: For the FarmBug, we use the setup project we created earlier with the blinking LED. If you don't have this project, please complete [these steps](https://github.com/onethinx/Workshop_29May2023#2-farmbug-project-chip-configuration-firmware-coding-and-debugging) first.**
-
 ## 1 Change LED functionality
 We want to change the automatic blinking LED and have the firmware determine the state of the LED. This way we can give useful information to the user about the status of the Farmbug.
 
