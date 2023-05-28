@@ -9,7 +9,7 @@ We want to change the automatic blinking LED and have the firmware determine the
 1. Open the TopDesign.cysch schematic from the Workspace Explorer (left bar in PSoC Creator)
 1. Remove the circuitry except the LED IO symbol (select and press `delete`)
 1. Double click the LED IO symbol to go to the properties of the IO pin
-1. Uncheck `HW Connection` as shown below<br>
+1. Uncheck `HW Connection` as shown below:<br>
 ![LED HW connection](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/LED_HWconnect.png?raw=true)<br>
 1. Also note that there's no circuitry left on the schematic except the LED_B IO pin
 1. Build the project via the Build menu or by clicking the Build Symbol (or just press Shift+F6)
@@ -29,7 +29,30 @@ We want to change the automatic blinking LED and have the firmware determine the
 		CyDelay(300);
 	}
 ```
-3. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code<br>
-  Real time debugging is accomplished with the debug buttons as shown.<br>
+1. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code<br>
+  Real time debugging is accomplished with the debug buttons as shown:<br>
 ![debug session](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/debug_session.png?raw=true)<br>
   You can play around with the debug buttons to see it's functionality (e.g. step into the CyDelay function)
+  
+## 2 Add the Capacitive moisture sensor
+The moisture sensor consists of a capacitive element which can be perfectly implemented by the CapSense usermodule of the PSoC6. First we'll implement the CapSense chip configuration and second we will add the code for reading the CapSense value.
+
+### 2.1 Adding the CapSense UserModule
+1. Open the PSoC Creator project and go to the TopDesign.cysch schematic from the Workspace Explorer (left bar)
+1. Select the CapSense usermodule from the Component Catalog (right bar: `Cypress -> CapSense -> CapSense [v3.0]`)
+1. Drag and drop the CapSense usermodule onto the schematic page:<br>
+![CapSense_UM](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/CapSense_UM.png?raw=true)<br><br>
+1. Double click the CapSense usermodule open the configuration window:<br>
+![add button](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/add_button.png?raw=true)<br>
+1. Change the name of the component to: `CapSense`
+1. Change the CSD tuning mode to: `Manual tuning`
+1. Add the CapSense sensing element (Button) by hitting the '+' icon on the left
+1. Click the `OK` button to make the changes
+
+### 2.1 Set the correct pins for the CapSense UserModule
+Capsense requires one IO to connect to a modulation capacitor. The OTX-18 has an internal connection of P7[7] to P10[2]. To use Capsense with the Onethinx module, the modulation capacitor needs to be connected to P10[2] and the PSoC Creator project has to be configured for a modulation capacitor at P7[7].
+1. Look up which IO pin the Sensor element is connected to. The sensor element in the [FarmBug schematic](https://github.com/onethinx/Workshop_29May2023/blob/main/Assets/FarmBug_schematic.png?raw=true) is indicated with C+:<br>
+![IO_config](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/IO_config.png?raw=true)<br>
+1. Open the Pins view inside PSoC Creator and set `\CapSense:Cmod\ (Cmod)` to P7[7]:<br>
+![CapSense pin](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/CapSense_pin.png?raw=true)<br>
+1. Set the CapSense sensor element `\CapSense:Sns\ (Cmod)` to the correct IO pin as found in the schematic above.
