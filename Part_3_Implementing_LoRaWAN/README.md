@@ -24,8 +24,8 @@ The following basic system settings will be used:
 - M0 mode: M0_DeepSleep (put M0 in DeepSleep when waiting in order to save battery)
 - BleEcoON: off (= false: no specific BLE functionality is needed to have the BLE ECO on)
 - DebugON: on (= true: we like to be able to debug even with the device in sleep).
-- 
-The personal keys for joining the network will be handed out at the start of the workshop.
+
+The personal keys for joining the network will be handed out at the beginning of the workshop.
 
 1. Put the following code after `#include "OTX18-EnableCapSense.h"` (line 42) to implement the configuration as described above:
 ```
@@ -63,9 +63,15 @@ coreConfiguration_t	coreConfig = {
 	}
 };
 ```
-
-
-
+2. Open the LoRaWAN_keys.h file by clicking the `Explorer` icon at the left panel of Visual Studio Code<br>
+![LoRaWAN keys](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/LoRaWAN_keys.png?raw=true)<br>
+3. Fill in the keys you got at the beginning of the workshop.
+ 
+### 1.2 Implementing the LoRaWAN function calls
+Implementing LoRaWAN with the OTX-18 is really simple, we only need to have three function calls:
+- LoRaWAN_Init(...) to initialize and configure the LoRaWAN stack
+- LoRaWAN_Join(...) to join to the LoRaWAN network
+- LoRaWAN_Send(...) to send data to the LoRaWAN network
 
 
 ### 1.1 Add the ADC UserModule
