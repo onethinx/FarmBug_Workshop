@@ -18,7 +18,7 @@ We want to change the automatic blinking LED and have the firmware determine the
 
 ### 1.2 Write code to flash the LED 3 times at startup
 1. Open the Visual Studio Code project (if not already open)
-2. Include the PSoC Creator project by adding the following line before the main function (line 43)<br>
+2. Include the PSoC Creator project by adding the following line before the main function (line 42)<br>
 ```
 #include "project.h"
 ```
@@ -51,7 +51,7 @@ The moisture sensor consists of a capacitive element which can be perfectly impl
 1. Change the name of the component to: `CapSense`
 1. Change the CSD tuning mode to: `Manual tuning`
 1. Add the CapSense sensing element (Button) by hitting the '+' icon on the left
-1. Click the `OK` button to make the changes
+1. Click the `OK` button to make the changes.
 
 ### 2.1 Set the correct pins for the CapSense UserModule
 Capsense requires one IO to connect to a modulation capacitor. The OTX-18 has an internal connection of P7[7] to P10[2]. To use Capsense with the Onethinx module, the modulation capacitor needs to be connected to P10[2] and the PSoC Creator project has to be configured for a modulation capacitor at P7[7].
@@ -61,6 +61,36 @@ Capsense requires one IO to connect to a modulation capacitor. The OTX-18 has an
 ![CapSense pin](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/CapSense_pin.png?raw=true)<br>
 1. Set the CapSense sensor element `\CapSense:Sns\ (Cmod)` to the correct IO pin as found in the schematic above.
 1. Build the project via the Build menu or by clicking the Build Symbol (or just press Shift+F6)
-3. Wait for the build to succeed
-
+1. Wait for the build to succeed
+1. Repeat the last build step (info for nerds: because PSoC Creator runs the IDE integration after the postbuild action, unfortunately).
+2. 
 ### 2.2 Write code for the CapSense implementation
+1. Switch to the Visual Studio Code project
+2. Include the OTX18-EnableCapSense to enable CapSense for the module by adding the following line before the main function (line 43)<br>
+```
+#include "OTX18-EnableCapSense.h"
+```
+3. Add the following code at the start of the main function to initialize / configure CapSense at startup:<br>
+```
+	/* Enable Global Interrupts */
+	__enable_irq();
+
+	/* Enable CapSense on the OTX-18 */
+	OTX18_EnableCapSense();
+	/* Start the CapSense usermodule */
+	CapSense_Start();
+```
+4. Add the following code between the curly braces of the Main Loop to process the CapSense functions and read the CapSense value (moisture):<br>
+```
+		/* Call functions to get CapSense value */
+		CapSense_ProcessAllWidgets();
+		CapSense_ScanAllWidgets();
+		while (CapSense_IsBusy()) {}					// Wait till CapSense function is finished
+
+		/* Read raw CapSense value directly from the register */
+		uint16_t CapSense_Value = *CapSense_dsRam.snsList.button0[0].raw;
+		/* Turn the LED on when the CapSense value exceeds 3800 */
+		Cy_GPIO_Write(LED_B_PORT, LED_B_NUM,  CapSense_Value > 3800);
+```
+5. If the instructions are followed correctly, the code should look like [this](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/code_2.2.png?raw=true)
+6. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code<br>
