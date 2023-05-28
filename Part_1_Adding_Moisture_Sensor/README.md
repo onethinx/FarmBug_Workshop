@@ -57,7 +57,7 @@ The moisture sensor consists of a capacitive element which can be perfectly impl
 Capsense requires one IO to connect to a modulation capacitor. The OTX-18 has an internal connection of P7[7] to P10[2]. To use Capsense with the Onethinx module, the modulation capacitor needs to be connected to P10[2] and the PSoC Creator project has to be configured for a modulation capacitor at P7[7].
 1. Look up which IO pin the Sensor element is connected to. The sensor element in the [FarmBug schematic](https://github.com/onethinx/Workshop_29May2023/blob/main/Assets/FarmBug_schematic.png?raw=true) is indicated with C+:<br>
 ![IO_config](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/IO_config.png?raw=true)<br>
-1. Open the Pins view inside PSoC Creator and set the modulation capacitor `\CapSense:Cmod\ (Cmod)` to P7[7]:<br>
+1. Open the Pins view inside PSoC Creator from the WorkSpace Explorer and set the modulation capacitor `\CapSense:Cmod\ (Cmod)` to P7[7]:<br>
 ![CapSense pin](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/CapSense_pin.png?raw=true)<br>
 1. Set the CapSense sensor element `\CapSense:Sns\ (Cmod)` to the correct IO pin as found in the schematic above.
 1. Build the project via the Build menu or by clicking the Build Symbol (or just press Shift+F6)
