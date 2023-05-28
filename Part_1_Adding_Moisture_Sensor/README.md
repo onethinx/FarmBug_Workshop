@@ -12,3 +12,8 @@ We want to change the automatic blinking LED and have the firmware determine the
 1. Uncheck `HW Connection` as shown below<br>
 ![LED HW connection](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/LED_HWconnect.png?raw=true)<br>
 1. Also note that there's no circuitry left on the schematic except the LED_B IO pin
+1. Build the project via the Build menu or by clicking the Build Symbol (or just press Shift+F6)
+1. After building, open the Visual Studio Code project (if not already open)
+1. Hit the Build-And-Launch button from the status bar at the bottom of VS Code
+2. <br>
+![debug session](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/debug_session.png?raw=true)<br>
