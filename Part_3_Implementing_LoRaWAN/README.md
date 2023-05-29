@@ -123,7 +123,7 @@ struct __attribute__ ((__packed__))
 		if (adcResult_Light > 4000) adcResult_Light = 4000;
 		loraPacket.lightLevel = (4000 - adcResult_Light) / 30;
 ```
-4. The raw ADC values for the temperature are not linear, so a nifty look up and interpolation function would come in handy. Add this code + function just before the main loop:
+4. The raw ADC values for the temperature are not linear, so a nifty look up and interpolation function would come in handy. Add this brilliant code + function just before the main loop:
 ```
 #define		NTC_THopen		4000	// Threshold to return OPEN (approx -25C)
 #define		NTC_THshort		300		// Threshold to return SHORT
@@ -153,4 +153,25 @@ int16_t NTCcalc(uint16_t NTCvalue)
 	return 1095;// Value higher than 109.5 C or not connected error
 }
 ```
-5. 
+5. Implement the ADC functions on the RAW ADC data just after this line `volatile uint32_t adcResult_temperatureAir = ADC_GetResult32(2);`:
+```
+		/* Convert raw ADC values into temperatures */
+		loraPacket.temperatureSoil = NTCcalc(adcResult_temperatureSoil);
+		loraPacket.temperatureAir = NTCcalc(adcResult_temperatureAir);
+```
+6. Finally we need to replace the delay function (CyDelay) with the Sleep function. Add the configuration for the sleep mode just after the `coreConfig` structure
+```
+sleepConfig_t sleepConfig =
+{
+	.sleepMode = modeDeepSleep,
+	.BleEcoON = false,
+	.DebugON = true,
+	.sleepCores = coresBoth,
+	.wakeUpPin = wakeUpPinHigh(true),
+	.wakeUpTime = wakeUpDelay(0, 0, 0, 30), // day, hour, minute, second
+};
+```
+7. And change the last line of the main loop (CyDelay(...)) to:
+```
+ LoRaWAN_Sleep(&sleepConfig);
+```
