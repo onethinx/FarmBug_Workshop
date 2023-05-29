@@ -92,5 +92,57 @@ Implementing LoRaWAN with the OTX-18 is really simple, we only need to have thre
 3. If the instructions are followed correctly, the code should look like [this](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/code_3.3.png?raw=true)
 4. Put a breakpoint on the main loop `for` statement<br>
 ![breakpoint](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/breakpoint.png?raw=true)<br> 
-6. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code
-7. Hpefully your device will connect to the LoRaWAN network and thereby return from the `LoRaWAN_Join` function to hit the breapoint
+5. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code
+6. Hopefully your device will connect to the LoRaWAN network and thereby return from the `LoRaWAN_Join` function to hit the breakpoint.
+
+### 1.3 Preparing the real world data and adding Sleep functionality
+This part finalizes the firmware of the FarmBug. Currently the device only sends the raw ADC light data and does just wait at the end of the loop to repeat. We want the device to send all data in a formatted way and have it in sleep mode when it's idle. Let's start with the data formatting first.
+1. The following code will make a fixed format data packet to send over LoRaWAN. Put this code just after the `#include "LoRaWAN_keys.h"` code line:
+```
+struct __attribute__ ((__packed__))
+{
+	uint8_t 	humidityLevel;			// we have 8 bits of humidity data
+	uint16_t	temperatureSoil;		// we have 16 bits of soil temperature data
+	uint16_t	temperatureAir;			// we have 16 bits of air temperature data
+	uint8_t		lightLevel;			// we have 8 bits of light level data
+} loraPacket;
+```
+2. Next, let's format the CapSense moisture/humidity data into a percentage (0-100%). The raw data roughly ranges from 3450-4075. Let's make it ourselves easy and use the following formula: humidity = (value - 3475) / 6.
+  Insert the following code just after `uint16_t CapSense_Value = *CapSense_dsRam.snsList.button0[0].raw;` to set the humidityLevel in the loraPacket:
+```
+		
+		/* Limit the raw values to prevent under-/ overflow */
+		if (CapSense_Value < 3475) CapSense_Value = 3475;
+		if (CapSense_Value > 4075) CapSense_Value = 4075;
+		loraPacket.humidityLevel = (CapSense_Value - 3475) / 6;
+```
+3. The raw ADC values for the temperature are not linear, so a nifty look up and interpolation routine would come in handy. Add this code just before the main loop:
+```
+#define		NTC_THopen		4000	// Threshold to return OPEN (approx -25C)
+#define		NTC_THshort		300		// Threshold to return SHORT
+#define		NTC_SHORT		9999
+#define		NTC_OPEN		-9999
+
+const uint16_t	NTClookup[] = {   6,  7, 8, 10,12, 14, 16, 17, 18, 19, 20, 20, 20, 19, 18, 17, 16, 15, 13, 12, 10, 10,  8,  7,  7,  6,  5,  4,  4,  2  };
+//								-40    -30    -20 -15 -10  -5   0   5  10  15  20  25  30  35  40  45  50  55  60  65  70  75  80  85  90  95 100 105
+
+int16_t NTCcalc(uint16_t NTCvalue)
+{
+	uint8 ADCcompCount = 0;
+	uint8 ADCcompPoint = 0;
+	uint16 NTCcount = 3923;	// First reference @ -40 C
+	int TempOut = - 405;	//	Start with - 40.5 C
+	if (NTCvalue > NTC_THopen) return NTC_OPEN;
+	if (NTCvalue < NTC_THshort) return NTC_SHORT;
+	do {
+		if (NTCvalue > NTCcount) return TempOut;		// Value lower than -40.5 C or not connected error
+		NTCcount -= NTClookup[ADCcompPoint] ;			// Get .5C step and step compare value towards NTC value
+		if (++ADCcompCount == 10) {
+			ADCcompCount = 0;
+			ADCcompPoint++;
+		}
+		TempOut += 5;
+	} while (NTCcount > 342);
+	return 1095;// Value higher than 109.5 C or not connected error
+}
+```
