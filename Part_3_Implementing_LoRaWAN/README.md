@@ -29,6 +29,8 @@ The personal keys for joining the network will be handed out at the beginning of
 
 1. Put the following code after `#include "OTX18-EnableCapSense.h"` (line 42) to implement the configuration as described above:
 ```
+#include "OnethinxCore01.h"
+#include "OnethinxExt01.h"
 #include "LoRaWAN_keys.h"
 
 coreConfiguration_t	coreConfig = {
@@ -73,3 +75,22 @@ Implementing LoRaWAN with the OTX-18 is really simple, we only need to have thre
 - `LoRaWAN_Join(...)` to join to the LoRaWAN network
 - `LoRaWAN_Send(...)` to send data to the LoRaWAN network
 
+1. We want to initialize LoRaWAN and join the network before going into the main loop. Paste this code just before the main loop:
+```
+	/* Initialize the OTX-18 stack with the configuration */
+	LoRaWAN_Init(&coreConfig);
+	/* Try to join and go in deepsleep while we do */
+	LoRaWAN_Join(M4_WaitDeepSleep);
+```
+2. Now let's say we only want to send the raw ADC light data. Paste the following code just after powering the sensors off:
+```
+		/* Send LoRaWAN sensor data */
+		LoRaWAN_Send((uint8_t *) &adcResult_Light, sizeof (adcResult_Light), M4_WaitDeepSleep);
+		/* Wait 30 seconds (30000 milliseconds) before sending reading data and sending again */
+		CyDelay(30000);
+```
+3. If the instructions are followed correctly, the code should look like [this](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/code_3.3.png?raw=true)
+4. Put a breakpoint on the main loop `for` statement<br>
+![breakpoint](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/breakpoint.png?raw=true)<br> 
+6. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code
+7. Hpefully your device will connect to the LoRaWAN network and thereby return from the `LoRaWAN_Join` function to hit the breapoint
