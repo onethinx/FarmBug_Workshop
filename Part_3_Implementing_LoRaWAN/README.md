@@ -179,7 +179,7 @@ sleepConfig_t sleepConfig =
 ```
  LoRaWAN_Sleep(&sleepConfig);
 ```
-9. If the instructions are followed correctly, the code should look like [this](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/code_3.2.png?raw=true)
+9. If the instructions are followed correctly, the code should look like [this](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/main.c?raw=true)
 10. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code
 11. Cross fingers and hopefully the FarmBug will work as expected 🎉
-10. Congratulations, you're now a qualified Onethinx Seasoned Engineer<br>🤓
+10. Congratulations, you're now a qualified Onethinx Expert Engineer<br>🤓
