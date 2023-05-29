@@ -84,4 +84,4 @@ To implement the reading of the sensors, we have to add the ADC UserModule to th
 7. If the instructions are followed correctly, the code should look like [this](https://github.com/onethinx/FarmBug_Workshop/blob/main/Assets/code_3.2.png?raw=true)
 8. Hit the `Build-And-Launch` button from the status bar at the bottom of VS Code
 9. Cross fingers and hopefully the Blue LED will turn on as enough light falls on the Light Sensor 🎉
-10. Congratulations, you're now a qualified Onethinx Seasoned Engineer<br>🤓
+10. Congratulations, you're now a qualified Onethinx Expert Engineer<br>🤓
