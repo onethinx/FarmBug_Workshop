@@ -159,7 +159,11 @@ int16_t NTCcalc(uint16_t NTCvalue)
 		loraPacket.temperatureSoil = NTCcalc(adcResult_temperatureSoil);
 		loraPacket.temperatureAir = NTCcalc(adcResult_temperatureAir);
 ```
-6. Finally we need to replace the delay function (CyDelay) with the Sleep function. Add the configuration for the sleep mode just after the `coreConfig` structure
+6. Change the data of the `LoRaWAN_Send(..)` function to implement the sensor data:
+```
+ LoRaWAN_Send((uint8_t *) &loraPacket, sizeof (loraPacket), M4_WaitDeepSleep);
+ ```
+7. Finally we need to replace the delay function (CyDelay) with the Sleep function. Add the configuration for the sleep mode just after the `coreConfig` structure
 ```
 sleepConfig_t sleepConfig =
 {
@@ -171,7 +175,7 @@ sleepConfig_t sleepConfig =
 	.wakeUpTime = wakeUpDelay(0, 0, 0, 30), // day, hour, minute, second
 };
 ```
-7. And change the last line of the main loop (CyDelay(...)) to:
+8. And change the last line of the main loop (CyDelay(...)) to:
 ```
  LoRaWAN_Sleep(&sleepConfig);
 ```
