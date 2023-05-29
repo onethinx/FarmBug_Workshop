@@ -110,13 +110,20 @@ struct __attribute__ ((__packed__))
 2. Next, let's format the CapSense moisture/humidity data into a percentage (0-100%). The raw data roughly ranges from 3450-4075. Let's make it ourselves easy and use the following formula: humidity = (value - 3475) / 6.
   Insert the following code just after `uint16_t CapSense_Value = *CapSense_dsRam.snsList.button0[0].raw;` to set the humidityLevel in the loraPacket:
 ```
-		
 		/* Limit the raw values to prevent under-/ overflow */
 		if (CapSense_Value < 3475) CapSense_Value = 3475;
 		if (CapSense_Value > 4075) CapSense_Value = 4075;
 		loraPacket.humidityLevel = (CapSense_Value - 3475) / 6;
 ```
-3. The raw ADC values for the temperature are not linear, so a nifty look up and interpolation routine would come in handy. Add this code just before the main loop:
+3. For the Light sensor we also want a percentage (0-100%). The raw data roughly ranges from 1000 (light) to 4000 (dark). Let's make it ourselves easy and use the following formula: light = (4000 - value) / 30.
+  Insert the following code just after `uint16_t CapSense_Value = *CapSense_dsRam.snsList.button0[0].raw;` to set the humidityLevel in the loraPacket:
+```
+		/* Limit the raw values to prevent under-/ overflow */
+		if (adcResult_Light < 1000) adcResult_Light = 1000;
+		if (adcResult_Light > 4000) adcResult_Light = 4000;
+		loraPacket.lightLevel = (4000 - adcResult_Light) / 30;
+```
+4. The raw ADC values for the temperature are not linear, so a nifty look up and interpolation function would come in handy. Add this code + function just before the main loop:
 ```
 #define		NTC_THopen		4000	// Threshold to return OPEN (approx -25C)
 #define		NTC_THshort		300		// Threshold to return SHORT
@@ -146,3 +153,4 @@ int16_t NTCcalc(uint16_t NTCvalue)
 	return 1095;// Value higher than 109.5 C or not connected error
 }
 ```
+5. 
